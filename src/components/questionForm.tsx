@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import {
   Modal,
@@ -79,7 +81,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
       if (response.ok) {
         const id = await response.text();
-        window.localStorage.setItem("questionId", id);
+        typeof window !== "undefined" &&
+          window.localStorage.setItem("questionId", id);
         onClose();
       } else {
         console.error("Failed to add/update question:", response.statusText);
