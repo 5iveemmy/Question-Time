@@ -37,7 +37,7 @@ export default function Home(): JSX.Element {
         email,
       });
       const { token } = response.data;
-      router.push("/dashboard");
+      router.push("/questions");
 
       localStorage.setItem("token", token);
     } catch (error) {
