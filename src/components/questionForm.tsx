@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -15,27 +15,30 @@ import {
 } from "@chakra-ui/react";
 import { Question } from "@qt/types";
 import { questionsUrl } from "@qt/utils/endpoints";
-import { token } from "@qt/utils/helper";
+import { questionId, token } from "@qt/utils/helper";
+import { EditIcon } from "lucide-react";
 
 interface QuestionFormProps {
-  onSubmit: (question: Question) => void;
+  editMode?: boolean;
   initialQuestion?: Question;
 }
 
 const QuestionForm: React.FC<QuestionFormProps> = ({
-  onSubmit,
+  editMode,
   initialQuestion,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState<boolean>(false);
-  const [question, setQuestion] = useState(
-    initialQuestion ? initialQuestion.question : ""
-  );
-  const [options, setOptions] = useState(
-    initialQuestion
-      ? initialQuestion.options
-      : Array.from({ length: 5 }, () => "")
-  );
+  const [question, setQuestion] = useState("");
+  const [options, setOptions] = useState(Array.from({ length: 5 }, () => ""));
+  const [optionsLengthCheck, setOptionsLengthCheck] = useState(false);
+
+  useEffect(() => {
+    if (initialQuestion) {
+      setQuestion(initialQuestion.question);
+      setOptions(initialQuestion.options);
+    }
+  }, [initialQuestion]);
 
   const handleOptionChange = (index: number, value: string) => {
     const updatedOptions = [...options];
@@ -53,38 +56,58 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
     try {
       setLoading(true);
-      const response = await fetch(questionsUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Token: token as string,
-        },
-        body: JSON.stringify(questionData),
-      });
+      let response;
+      if (editMode && initialQuestion) {
+        response = await fetch(`${questionsUrl}/${questionId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Token: token as string,
+          },
+          body: JSON.stringify(questionData),
+        });
+      } else {
+        response = await fetch(questionsUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Token: token as string,
+          },
+          body: JSON.stringify(questionData),
+        });
+      }
 
       if (response.ok) {
         const id = await response.text();
-        localStorage.setItem("quesionId", id);
-        onSubmit(questionData);
+        localStorage.setItem("questionId", id);
         onClose();
       } else {
-        console.error("Failed to add question:", response.statusText);
+        console.error("Failed to add/update question:", response.statusText);
       }
     } catch (error) {
-      console.error("Error adding question:", error);
+      console.error("Error adding/updating question:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  console.log(options);
-  const optionsLengthCheck =
-    options.filter((option) => option.trim() !== "").length < 3;
+  console.log(questionId, "questionId");
+
+  useEffect(() => {
+    setOptionsLengthCheck(
+      options.filter((option) => option.trim() !== "").length < 3
+    );
+  }, [options]);
+
   return (
     <>
-      <Button colorScheme="blue" onClick={onOpen}>
-        Add Question
-      </Button>
+      {editMode ? (
+        <EditIcon size={18} onClick={onOpen} cursor="pointer" />
+      ) : (
+        <Button colorScheme="blue" onClick={onOpen}>
+          Add Question
+        </Button>
+      )}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -115,7 +138,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               <Button
                 isDisabled={optionsLengthCheck}
                 _hover={{
-                  opacity: optionsLengthCheck ?? "0.8",
+                  opacity: optionsLengthCheck ? "0.8" : undefined,
                 }}
                 isLoading={loading}
                 onClick={handleSubmit}

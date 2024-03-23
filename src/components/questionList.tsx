@@ -1,6 +1,7 @@
 import {
   Box,
   Flex,
+  HStack,
   ListItem,
   OrderedList,
   Radio,
@@ -10,6 +11,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Question } from "@qt/types";
+import QuestionForm from "./questionForm";
+import DeleteModal from "./deteleModal";
 
 interface QuestionListProps {
   questions: Question[];
@@ -25,7 +28,10 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions }) => {
               <Box key={question.question}>
                 <Flex>
                   <ListItem>{question?.question ?? ""} </ListItem>
-                  <Text>Edit</Text>
+                  <HStack pl="4">
+                    <QuestionForm editMode initialQuestion={question} />
+                    <DeleteModal />
+                  </HStack>
                 </Flex>
 
                 <RadioGroup fontWeight={"300"} size={"sm"} pt="2">
