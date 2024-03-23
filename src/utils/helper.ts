@@ -1,2 +1,2 @@
-export const token = localStorage.getItem("token");
-export const questionId = localStorage.getItem("questionId");
+export const token = window.localStorage.getItem("token");
+export const questionId = window.localStorage.getItem("questionId");

@@ -79,7 +79,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
       if (response.ok) {
         const id = await response.text();
-        localStorage.setItem("questionId", id);
+        window.localStorage.setItem("questionId", id);
         onClose();
       } else {
         console.error("Failed to add/update question:", response.statusText);

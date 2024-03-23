@@ -39,7 +39,7 @@ export default function Home(): JSX.Element {
       const { token } = response.data;
       router.push("/questions");
 
-      localStorage.setItem("token", token);
+      window.localStorage.setItem("token", token);
     } catch (error) {
       console.error("Error occurred:", error);
     } finally {
