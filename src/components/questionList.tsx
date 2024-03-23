@@ -25,10 +25,6 @@ const QuestionList: React.FC<QuestionListProps> = ({
   questions,
   handleAddQuestion,
 }) => {
-  const handleDelete = () => {
-    handleAddQuestion;
-  };
-
   return (
     <VStack spacing={4} alignItems="start">
       <OrderedList listStylePosition="outside">
