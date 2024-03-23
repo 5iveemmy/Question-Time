@@ -1,9 +1,15 @@
-import { Box, Text, VStack } from "@chakra-ui/react";
-
-interface Question {
-  question: string;
-  options: string[];
-}
+import {
+  Box,
+  Flex,
+  ListItem,
+  OrderedList,
+  Radio,
+  RadioGroup,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { Question } from "@qt/types";
 
 interface QuestionListProps {
   questions: Question[];
@@ -11,13 +17,36 @@ interface QuestionListProps {
 
 const QuestionList: React.FC<QuestionListProps> = ({ questions }) => {
   return (
-    <VStack spacing={4}>
-      {questions.map((question, index) => (
-        <Box key={index} borderWidth="1px" p={4} borderRadius="md" w="80">
-          <Text fontWeight="bold">{question.question}</Text>
-          <Text>{question.options.join(", ")}</Text>
-        </Box>
-      ))}
+    <VStack spacing={4} alignItems="start">
+      <OrderedList listStylePosition="outside">
+        <Flex flexDir="column" gap="4">
+          {questions?.map((question) => {
+            return (
+              <Box key={question.question}>
+                <Flex>
+                  <ListItem>{question?.question ?? ""} </ListItem>
+                  <Text>Edit</Text>
+                </Flex>
+
+                <RadioGroup fontWeight={"300"} size={"sm"} pt="2">
+                  <Stack spacing={3} width="fit-content">
+                    {question?.options?.map((i) => (
+                      <Radio pl="2" value={i} key={i}>
+                        <Text
+                          fontSize={{ base: "xs", md: "sm" }}
+                          fontWeight="light"
+                        >
+                          {i}
+                        </Text>
+                      </Radio>
+                    ))}
+                  </Stack>
+                </RadioGroup>
+              </Box>
+            );
+          })}
+        </Flex>
+      </OrderedList>
     </VStack>
   );
 };
