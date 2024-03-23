@@ -14,6 +14,7 @@ import { emailRegex } from "@qt/utils/regex";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { getToken } from "@qt/utils/endpoints";
 
 interface FormValue {
   email: string;
@@ -32,12 +33,9 @@ export default function Home(): JSX.Element {
 
     try {
       setLoading(true);
-      const response = await axios.post<{ token: string }>(
-        "https://qt.organogram.app/token",
-        {
-          email,
-        }
-      );
+      const response = await axios.post<{ token: string }>(getToken, {
+        email,
+      });
       const { token } = response.data;
       router.push("/dashboard");
 
