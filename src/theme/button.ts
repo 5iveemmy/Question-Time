@@ -1,5 +1,14 @@
 import { defineStyle, defineStyleConfig } from "@chakra-ui/react";
 
+const outline = defineStyle({
+  rounded: "md",
+  color: "dark",
+  bgColor: "transparent",
+  borderColor: "#CBD5E1",
+  fontWeight: "medium",
+  fontSize: "sm",
+});
+
 const solid = defineStyle({
   rounded: "md",
   color: "white",
@@ -16,6 +25,18 @@ const solid = defineStyle({
   },
 });
 
+const danger = defineStyle({
+  px: 10,
+  bgColor: "danger",
+  color: "white",
+  fontSize: "sm",
+  _hover: {
+    bgColor: "white",
+    border: "1px solid danger",
+    color: "danger",
+  },
+});
+
 export const buttonTheme = defineStyleConfig({
-  variants: { solid },
+  variants: { outline, danger, solid },
 });

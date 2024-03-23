@@ -7,4 +7,5 @@ export const colors = {
     200: "#E2E8F0",
     300: "#6F7798",
   },
+  danger: "#EF4444",
 };
