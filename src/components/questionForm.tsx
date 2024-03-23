@@ -17,23 +17,30 @@ import {
 } from "@chakra-ui/react";
 import { Question } from "@qt/types";
 import { questionsUrl } from "@qt/utils/endpoints";
-import { questionId, token } from "@qt/utils/helper";
+import { token } from "@qt/utils/helper";
 import { EditIcon } from "lucide-react";
 
 interface QuestionFormProps {
   editMode?: boolean;
   initialQuestion?: Question;
+  onSubmit?: (question: Question) => void;
 }
 
 const QuestionForm: React.FC<QuestionFormProps> = ({
   editMode,
+  onSubmit,
   initialQuestion,
 }) => {
+  const questionId =
+    typeof window !== "undefined" && window.localStorage.getItem("questionId");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState<boolean>(false);
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(Array.from({ length: 5 }, () => ""));
   const [optionsLengthCheck, setOptionsLengthCheck] = useState(false);
+  const [questionID, setQuestionID] = useState<string>("");
+
+  const id = questionID || questionId;
 
   useEffect(() => {
     if (initialQuestion) {
@@ -60,14 +67,19 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       setLoading(true);
       let response;
       if (editMode && initialQuestion) {
-        response = await fetch(`${questionsUrl}/${questionId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Token: token as string,
-          },
-          body: JSON.stringify(questionData),
-        });
+        response = await fetch(
+          `https://qt.organogram.app/questions/${encodeURIComponent(
+            (id as string).replace(/"/g, "")
+          )}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Token: token as string,
+            },
+            body: JSON.stringify(questionData),
+          }
+        );
       } else {
         response = await fetch(questionsUrl, {
           method: "POST",
@@ -80,7 +92,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       }
 
       if (response.ok) {
+        onSubmit?.(questionData);
         const id = await response.text();
+        setQuestionID(id);
         typeof window !== "undefined" &&
           window.localStorage.setItem("questionId", id);
         onClose();
@@ -93,8 +107,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       setLoading(false);
     }
   };
-
-  console.log(questionId, "questionId");
 
   useEffect(() => {
     setOptionsLengthCheck(

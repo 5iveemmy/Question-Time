@@ -12,25 +12,32 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { questionsUrl } from "@qt/utils/endpoints";
-import { questionId, token } from "@qt/utils/helper";
+import { token } from "@qt/utils/helper";
 import { Trash } from "lucide-react";
 import { useState } from "react";
 
 const DeleteModal = () => {
+  const questionId =
+    typeof window !== "undefined" && window.localStorage.getItem("questionId");
+
   const [loading, setLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const id = (questionId as string).replace(/"/g, "");
 
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${questionsUrl}/${questionId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Token: token as string,
-        },
-      });
+      const response = await fetch(
+        `https://qt.organogram.app/questions/${encodeURIComponent(id)}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Token: token as string,
+          },
+        }
+      );
 
       if (response.ok) {
         onClose();
