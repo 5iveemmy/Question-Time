@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getToken } from "@qt/utils/endpoints";
+import toast from "react-hot-toast";
 
 interface FormValue {
   email: string;
@@ -42,7 +43,7 @@ export default function Home(): JSX.Element {
       typeof window !== "undefined" &&
         window.localStorage.setItem("token", token);
     } catch (error) {
-      console.error("Error occurred:", error);
+      toast.error("Error occurred:", error as any);
     } finally {
       setLoading(false);
     }

@@ -7,6 +7,7 @@ import { questionsUrl } from "@qt/utils/endpoints";
 import QuestionForm from "@qt/components/questionForm";
 import { token } from "@qt/utils/helper";
 import { Question } from "@qt/types";
+import toast from "react-hot-toast";
 
 const Questions = () => {
   const [questions, setQuestions] = useState<any[]>([]);
@@ -22,7 +23,7 @@ const Questions = () => {
         const data = await response.json();
         setQuestions(Object.values(data));
       } catch (error) {
-        console.error("Error fetching questions:", error);
+        toast.error("Error fetching questions:", error as any);
       }
     };
 

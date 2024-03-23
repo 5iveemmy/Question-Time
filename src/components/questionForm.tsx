@@ -19,6 +19,7 @@ import { Question } from "@qt/types";
 import { questionsUrl } from "@qt/utils/endpoints";
 import { token } from "@qt/utils/helper";
 import { EditIcon } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface QuestionFormProps {
   editMode?: boolean;
@@ -98,11 +99,15 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         typeof window !== "undefined" &&
           window.localStorage.setItem("questionId", id);
         onClose();
+        toast.success("Question Added Successfully");
       } else {
-        console.error("Failed to add/update question:", response.statusText);
+        toast.error(
+          "Failed to add/update question:",
+          response.statusText as any
+        );
       }
     } catch (error) {
-      console.error("Error adding/updating question:", error);
+      toast.error("Error adding/updating question:", error as any);
     } finally {
       setLoading(false);
     }

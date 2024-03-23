@@ -15,6 +15,7 @@ import {
 import { token } from "@qt/utils/helper";
 import { Trash } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const DeleteModal = () => {
   const questionId =
@@ -41,11 +42,12 @@ const DeleteModal = () => {
 
       if (response.ok) {
         onClose();
+        toast.success("Question deleted successfully");
       } else {
-        console.error("Failed to delete question:", response.statusText);
+        toast.error("Failed to delete question:", response.statusText as any);
       }
     } catch (error) {
-      console.error("Error deleting question:", error);
+      toast.error("Error deleting question:", error as any);
     } finally {
       setLoading(false);
     }
