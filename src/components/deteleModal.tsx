@@ -42,6 +42,7 @@ const DeleteModal = () => {
 
       if (response.ok) {
         onClose();
+        typeof window !== "undefined" && window.location.reload();
         toast.success("Question deleted successfully");
       } else {
         toast.error("Failed to delete question:", response.statusText as any);

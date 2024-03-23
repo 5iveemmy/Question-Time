@@ -99,7 +99,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         typeof window !== "undefined" &&
           window.localStorage.setItem("questionId", id);
         onClose();
-        toast.success("Question Added Successfully");
+        const message = editMode ? "Updated" : "Added";
+        toast.success(`Question ${message} Successfully`);
       } else {
         toast.error(
           "Failed to add/update question:",

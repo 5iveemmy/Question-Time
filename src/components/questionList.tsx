@@ -18,9 +18,17 @@ import DeleteModal from "./deteleModal";
 
 interface QuestionListProps {
   questions: Question[];
+  handleAddQuestion: (question: Question) => void;
 }
 
-const QuestionList: React.FC<QuestionListProps> = ({ questions }) => {
+const QuestionList: React.FC<QuestionListProps> = ({
+  questions,
+  handleAddQuestion,
+}) => {
+  const handleDelete = () => {
+    handleAddQuestion;
+  };
+
   return (
     <VStack spacing={4} alignItems="start">
       <OrderedList listStylePosition="outside">
@@ -31,7 +39,11 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions }) => {
                 <Flex>
                   <ListItem>{question?.question ?? ""} </ListItem>
                   <HStack pl="4">
-                    <QuestionForm editMode initialQuestion={question} />
+                    <QuestionForm
+                      editMode
+                      initialQuestion={question}
+                      onSubmit={handleAddQuestion}
+                    />
                     <DeleteModal />
                   </HStack>
                 </Flex>

@@ -41,7 +41,10 @@ const Questions = () => {
         {questions.length === 0 ? (
           <QuestionForm onSubmit={handleAddQuestion} />
         ) : (
-          <QuestionList questions={questions} />
+          <QuestionList
+            questions={questions}
+            handleAddQuestion={handleAddQuestion}
+          />
         )}
       </Box>
     </Container>
