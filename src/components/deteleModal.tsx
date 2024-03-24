@@ -24,7 +24,7 @@ const DeleteModal = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const id = (questionId as string).replace(/"/g, "");
+  const id = questionId ? questionId.replace(/"/g, "") : "";
 
   const handleDelete = async () => {
     setLoading(true);

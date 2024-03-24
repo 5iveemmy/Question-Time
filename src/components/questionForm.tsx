@@ -41,7 +41,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   const [optionsLengthCheck, setOptionsLengthCheck] = useState(false);
   const [questionID, setQuestionID] = useState<string>("");
 
-  const id = questionID || questionId;
+  const id = questionId ? questionId ?? "" : questionID;
 
   useEffect(() => {
     if (initialQuestion) {
