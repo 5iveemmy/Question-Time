@@ -38,14 +38,12 @@ const Questions = () => {
     <Container maxW="container.lg" mx="5" py="5">
       <Heading my={4}>Questions</Heading>
       <Box>
-        {questions.length === 0 ? (
-          <QuestionForm onSubmit={handleAddQuestion} />
-        ) : (
-          <QuestionList
-            questions={questions}
-            handleAddQuestion={handleAddQuestion}
-          />
-        )}
+        <QuestionForm onSubmit={handleAddQuestion} />
+
+        <QuestionList
+          questions={questions}
+          handleAddQuestion={handleAddQuestion}
+        />
       </Box>
     </Container>
   );

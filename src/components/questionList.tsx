@@ -26,7 +26,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
   handleAddQuestion,
 }) => {
   return (
-    <VStack spacing={4} alignItems="start">
+    <VStack pt="2" spacing={4} alignItems="start">
       <OrderedList listStylePosition="outside">
         <Flex flexDir="column" gap="4">
           {questions?.map((question) => {
